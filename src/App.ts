@@ -1,7 +1,8 @@
-import express, { Application, Router } from "express";
+import express, { Application } from "express";
 import { Routes } from "./routes";
-
 import { LoggerMiddleware } from "./middlewares/LoggerMiddleware";
+import ErrorHandler from "./errors";
+import connectDatabase from "./services/mongoose";
 
 export default class App {
 
@@ -10,8 +11,13 @@ export default class App {
   public constructor() {
     this.app = express();
 
+    connectDatabase(this.app);
+    
     this.registerMiddlewares();
+
     this.app.use('/', Routes);
+
+    this.app.use(ErrorHandler);
   }
 
   public listen() {
