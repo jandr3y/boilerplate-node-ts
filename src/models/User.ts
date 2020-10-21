@@ -7,7 +7,7 @@ const UserSchema = new Schema({
       required: [true, 'O campo nome completo é obrigatório'],
       validate: {
         validator: function(v: string) {
-          return ( v.length < 6 || v.length > 100 )
+          return ( v.length > 6 && v.length < 100 )
         },
         message: 'O campo nome completo deve conter de 6 a 100 caracteres'
       }
@@ -28,18 +28,20 @@ const UserSchema = new Schema({
         required: [true, 'o campo senha é obrigatório'],
         validate: {
           validator: function(v: string) {
-            return ( v.length < 6 || v.length > 20 ) 
+            return ( v.length > 6 && v.length < 20 ) 
           },
           message: () => `A senha deve conter de 6 a 20 caracteres`
         }
     },
     role: {
         type: Number,
-        enum: {
-          values: [1,2,3,4,5],
-          message: 'Permissão incorreta'
-        },
-        required: [true, 'O campo permissão é obrigatório']
+        required: [true, 'O campo permissão é obrigatório'],
+        validate: {
+          validator: function(v: number) {
+            return [1,2,3,4,5].indexOf(v) !== -1
+          },
+          message: () => 'O campo permissão esta incorreto.'
+        }
     },
     confirmCode: {
         type: String,
@@ -74,7 +76,7 @@ UserSchema.methods.getPayload = function(){
 export interface IUser extends Document {
     realname: string,
     email: string,
-    role: string,
+    role: number,
     password: string,
     confirmPassword: string,
     confirmCode: string,

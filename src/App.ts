@@ -1,8 +1,10 @@
 import express, { Application } from "express";
 import { Routes } from "./routes";
 import { LoggerMiddleware } from "./middlewares/LoggerMiddleware";
-import ErrorHandler from "./errors";
+import { errorHandler } from "./errors";
 import connectDatabase from "./services/mongoose";
+import bodyParser from "body-parser";
+import cors from "cors";
 
 export default class App {
 
@@ -12,12 +14,14 @@ export default class App {
     this.app = express();
 
     connectDatabase(this.app);
-    
+
+    // All middlewares before routes
     this.registerMiddlewares();
 
     this.app.use('/', Routes);
 
-    this.app.use(ErrorHandler);
+    // Error Handler
+    this.app.use(errorHandler);
   }
 
   public listen() {
@@ -27,6 +31,9 @@ export default class App {
   }
 
   private registerMiddlewares() {
+    this.app.use(cors());
+    this.app.use(bodyParser.urlencoded());
+    this.app.use(bodyParser.json());
     LoggerMiddleware(this.app);
   }
 }
