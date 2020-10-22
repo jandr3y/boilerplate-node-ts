@@ -1,8 +1,18 @@
 export default class MongoError extends Error {
 
-  constructor(message: string) {
-    super(message);
-    this.message = message;
-    this.name = "Error"; // (different names for different built-in error classes)
+  code: string = '';
+
+  constructor(error: any) {
+    super(error);
+    if ( error.code ) {
+      this.code = error.code;
+      switch ( error.code ) {
+        case 11000:
+          this.message = "Campo duplicado"
+        break;
+      }
+    }
+
+    this.name = "Error"; 
   }
 }

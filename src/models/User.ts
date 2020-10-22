@@ -1,5 +1,6 @@
 import { Schema, model, Document } from "mongoose";
 import { EMAIL_REGEX } from "../utils/regex";
+import bcrypt from "bcrypt";
 
 const UserSchema = new Schema({
     realname: {
@@ -43,11 +44,11 @@ const UserSchema = new Schema({
           message: () => 'O campo permissão esta incorreto.'
         }
     },
+    activated: {
+      type: Boolean
+    },
     confirmCode: {
         type: String,
-    },
-    activated: {
-        type: Boolean
     },
     recoverKey: {
         type: String
@@ -64,12 +65,34 @@ const UserSchema = new Schema({
   }   
 );
 
+/**
+ * This execute before save model
+ */
+UserSchema.pre('save', function(this: IUser, next){
+
+  if (!this.isModified('password')) return next();
+
+  bcrypt.genSalt(10, (err: any, salt: string) => {
+      if (err) return next(err);
+
+      bcrypt.hash(this.password, salt, (err: any, hash: string) => {
+          if (err) return next(err);
+          this.password = hash;
+
+          next();
+      });
+  });
+});
+
+/**
+ * Returns user payload for JWT
+ */
 UserSchema.methods.getPayload = function(){
     return {
         id: this._id,
         realname: this.realname,
         email: this.email,
-        activated: true
+        activated: this.activated
     }
 }
 

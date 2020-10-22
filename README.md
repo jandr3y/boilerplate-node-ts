@@ -16,6 +16,5 @@ Este é um boilerplate para acelerar o desenvolvimento de uma API Rest em Node J
 - Adicionar bibliotecas para segurança
 - Criar autenticação
 - Terminar rotas simples do usuário
-- Adicionar suporte para envio de emails
 - Corrigir implementação de middlewares fora da classe App
 - Tentar utilizar o Dotenv com o Typescript
