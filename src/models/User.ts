@@ -1,6 +1,6 @@
 import { Schema, model, Document } from "mongoose";
-import { EMAIL_REGEX } from "../utils/regex";
 import bcrypt from "bcrypt";
+import Validation from "../utils/Validation";
 
 const UserSchema = new Schema({
     realname: {
@@ -19,7 +19,7 @@ const UserSchema = new Schema({
         required: [true, 'O campo email é obrigatório'],
         validate: {
           validator: function(v: string) {
-            return EMAIL_REGEX.test(v);
+            return Validation.isEmail(v);
           },
           message: ({ value }) => `${value} não é um email válido`
         }

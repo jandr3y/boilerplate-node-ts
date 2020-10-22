@@ -3,7 +3,7 @@ import Responses from "../utils/Responses";
 import MongoError from "../errors/MongoError";
 import User, { IUser } from "../models/User";
 import Mailer from "../services/Mailer";
-import { generateEmailCode } from "../utils/random";
+import AuthUtils from "../utils/Auth";
 
 const router: Router = Router();
 
@@ -28,7 +28,7 @@ router.post('/', async (request: Request, response: Response, next: NextFunction
   }
 
   user.role = 1;
-  user.confirmCode = generateEmailCode();
+  user.confirmCode = AuthUtils.generateRandomCode();
   
   try {
     
