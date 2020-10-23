@@ -1,7 +1,7 @@
 import express, { Application } from "express";
 import { Routes } from "./routes";
 import { LoggerMiddleware } from "./middlewares/LoggerMiddleware";
-import { errorHandler } from "./errors";
+import { ErrorHandler } from "./errors/ErrorHandler";
 import connectDatabase from "./services/mongoose";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -21,7 +21,7 @@ export default class App {
     this.app.use('/', Routes);
 
     // Error Handler
-    this.app.use(errorHandler);
+    this.app.use(ErrorHandler);
   }
 
   public listen() {

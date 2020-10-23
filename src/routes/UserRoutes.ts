@@ -4,6 +4,7 @@ import MongoError from "../errors/MongoError";
 import User, { IUser } from "../models/User";
 import Mailer from "../services/Mailer";
 import AuthUtils from "../utils/Auth";
+import Logger from "../utils/Logger";
 
 const router: Router = Router();
 
@@ -24,24 +25,22 @@ router.post('/', async (request: Request, response: Response, next: NextFunction
       return Responses.badRequest('Email já cadastrado', response);
     }
   } catch ( error ) {
-    next(new MongoError(error));
+    next(error);
   }
 
   user.role = 1;
   user.confirmCode = AuthUtils.generateRandomCode();
   
   try {
-    
     await user.validate();
     await user.save();
     await Mailer.send().activate(user.realname, user.email, user.confirmCode);
-    
-    return response.status(200).json({ id: user._id });
-
   } catch ( error ) {
-    console.log(error);
-    next(new MongoError(error));
+    next(error);
   }
+  
+  Logger.info('Novo usuário cadastrado');
+  response.status(200).json({ id: user._id });
 
 })
 
@@ -58,7 +57,7 @@ router.get('/', async (request: Request, response: Response, next: NextFunction)
     return response.status(200).json(users);
 
   } catch ( error ) {
-    next(new MongoError(error));
+    next(next);
   }
 
 })

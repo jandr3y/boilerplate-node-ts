@@ -5,14 +5,12 @@ Este é um boilerplate para acelerar o desenvolvimento de uma API Rest em Node J
 ### Bibliotecas Utilizadas
 - TypeScript
 - Mongoose
-- BodyParser
-- Cors
+- Winston
 - Morgan
 
 
 ### Todo
 - Adicionar biblioteca de Testes
-- Adicionar log para dentro das rotas (depuração)
 - Adicionar bibliotecas para segurança
 - Criar autenticação
 - Terminar rotas simples do usuário

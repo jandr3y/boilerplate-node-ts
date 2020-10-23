@@ -1,5 +1,7 @@
 import Axios from "axios";
-import { SENDINBLUE_KEY } from "../settings";
+import winston from "winston";
+import { GLOBAL_PATHS, SENDINBLUE_KEY } from "../settings";
+import Logger from "../utils/Logger";
 
 /**
  * This class connect with sendinblue
@@ -10,8 +12,21 @@ class MailerClient {
 
   apiKey: string = '';
 
+  logger: any;
+
   constructor(apiKey: string) {
     this.apiKey = apiKey;
+    this.logger = winston.createLogger({
+      transports: [
+        new winston.transports.File({
+          level: 'info',
+          filename: GLOBAL_PATHS.LOGS + '/mail.log',
+          handleExceptions: true,
+          maxsize: 5242880,
+          maxFiles: 5
+        })
+      ]
+    })
   }
 
   /**
@@ -33,7 +48,9 @@ class MailerClient {
           },
           templateId: 1,
           to: [ { name, email } ]
-        })
+        });
+
+        this.logger.info('[' + new Date().toString().slice(4,24) + '] Activate account to: ' + email);
         resolve(true);
       } catch (err) {
         reject(err);
@@ -53,7 +70,9 @@ class MailerClient {
     return new Promise((resolve, reject) => {
       Axios.post(this.apiEndpoint, data, { headers })
         .then( result => resolve(result))
-        .catch( error => reject(error));
+        .catch( error => {
+          reject(error)
+        });
     })
   }
 }

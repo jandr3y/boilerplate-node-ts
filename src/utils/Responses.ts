@@ -14,4 +14,11 @@ export default class Responses {
       message
     })
   }
+
+  static internal(message: string, response: Response) {
+    return response.status(400).json({
+      error: true,
+      message
+    })
+  }
 }
