@@ -7,12 +7,17 @@ Este é um boilerplate para acelerar o desenvolvimento de uma API Rest em Node J
 - Mongoose
 - Winston
 - Morgan
+- JWT
+- Express
 
 
 ### Todo
 - Adicionar biblioteca de Testes
 - Adicionar bibliotecas para segurança
-- Criar autenticação
 - Terminar rotas simples do usuário
 - Corrigir implementação de middlewares fora da classe App
 - Tentar utilizar o Dotenv com o Typescript
+
+
+### Emails
+A API de envio de emails utilizada é a sendinblue, você pode alterar modificando o código do arquivo services/Mailer.ts

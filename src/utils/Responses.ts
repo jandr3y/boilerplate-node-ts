@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { response, Response } from "express";
 
 export default class Responses {
   static badRequest(message: string, response: Response) {
@@ -20,5 +20,12 @@ export default class Responses {
       error: true,
       message
     })
+  }
+
+  static unauthorized(response: Response) {
+    return response.status(401).json({
+      error: true,
+      message: 'Acesso não permitido'
+    });
   }
 }

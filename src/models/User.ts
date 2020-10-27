@@ -89,7 +89,7 @@ UserSchema.pre('save', function(this: IUser, next){
  */
 UserSchema.methods.getPayload = function(){
     return {
-        id: this._id,
+        _id: this._id,
         realname: this.realname,
         email: this.email,
         activated: this.activated
